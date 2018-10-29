@@ -1,0 +1,9 @@
+{
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "beautify.ignore": [
+    "**/*.js",
+    "**/*.jsx"
+  ]
+}
