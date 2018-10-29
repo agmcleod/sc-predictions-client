@@ -10,7 +10,7 @@ class App extends React.Component {
     return (
       <Wrapper>
         <Router>
-          <Route path='/' exact component={NewGame} />
+          <Route path="/" exact component={NewGame} />
         </Router>
       </Wrapper>
     );

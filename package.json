@@ -59,13 +59,7 @@
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
-    "extends": "react-app",
-    "plugins": [
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": "error"
-    }
+    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
@@ -84,7 +78,8 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
     "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "7.11.1"
+    "eslint-plugin-react": "7.11.1",
+    "prettier": "^1.14.3"
   },
   "jest": {
     "collectCoverageFrom": [
