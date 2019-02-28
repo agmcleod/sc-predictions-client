@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { publicApi } from '@common/api'
 import { FormLabel } from '@common/styles'
-import FormError from '@common/components/FormError'
+import { FormError } from '@common/components/FormError'
 
-import QuestionsSelect from './QuestionsSelect'
+import { QuestionsSelect } from './QuestionsSelect'
 
 function selectQuestion(gameQuestions, setGameQuestions, idx) {
   return event => {
@@ -13,19 +13,17 @@ function selectQuestion(gameQuestions, setGameQuestions, idx) {
   }
 }
 
-export default function NewGame() {
+export const NewGame = ({ history }) => {
   const [questions, setQuestions] = useState([])
   const [gameQuestions, setGameQuestions] = useState([{}])
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
     publicApi.get('/questions').then(response => {
-      if (response.questions) {
-        setQuestions(response.questions)
+      if (response.data.questions) {
+        setQuestions(response.data.questions)
       }
     })
-
-    return null
   }, [])
 
   const onSubmit = async e => {
@@ -37,9 +35,11 @@ export default function NewGame() {
 
     setErrors(errors)
     if (Object.keys(errors).length === 0) {
-      await publicApi.post('games', {
-        questionIds: gameQuestions.map(gq => gq.id)
+      const response = await publicApi.post('games', {
+        question_ids: gameQuestions.map(gq => gq.id)
       })
+
+      history.push(`/lobby/${response.slug}`)
     }
   }
 

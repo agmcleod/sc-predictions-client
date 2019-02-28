@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function QuestionsSelect({ id, questions, onChange, value }) {
+export const QuestionsSelect = ({ id, questions, onChange, value }) => {
   return (
     <select id={id} value={value} onChange={onChange}>
       <option value=''>Select Question</option>

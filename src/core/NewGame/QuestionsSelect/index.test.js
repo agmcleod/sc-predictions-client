@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme'
 import React from 'react'
-import QuestionsSelect from './index'
+import { QuestionsSelect } from './index'
 
 describe('QuestionsSelect', () => {
   let wrapper
