@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+import { currentUser } from '@common/currentUser'
 import { publicApi } from '@common/api'
 import { FormLabel } from '@common/styles'
 import { FormError } from '@common/components/FormError'
@@ -13,7 +17,7 @@ function selectQuestion(gameQuestions, setGameQuestions, idx) {
   }
 }
 
-export const NewGame = ({ history }) => {
+const NewGameComponent = ({ history, setUUID }) => {
   const [questions, setQuestions] = useState([])
   const [gameQuestions, setGameQuestions] = useState([{}])
   const [errors, setErrors] = useState({})
@@ -39,7 +43,9 @@ export const NewGame = ({ history }) => {
         question_ids: gameQuestions.map(gq => gq.id)
       })
 
-      history.push(`/lobby/${response.slug}`)
+      setUUID(response.data.creator)
+
+      history.push(`/lobby/${response.data.slug}`)
     }
   }
 
@@ -77,3 +83,15 @@ export const NewGame = ({ history }) => {
     </div>
   )
 }
+
+NewGameComponent.propTypes = {
+  history: PropTypes.object.isRequired,
+  setUUID: PropTypes.func.isRequired
+}
+
+export const NewGame = connect(
+  null,
+  {
+    setUUID: currentUser.actions.setUUID
+  }
+)(NewGameComponent)
