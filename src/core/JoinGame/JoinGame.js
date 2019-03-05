@@ -7,7 +7,7 @@ export const JoinGame = ({ setUUID }) => {
 
   const onSubmit = async e => {
     e.preventDefault()
-    const response = await publicApi.post('/api/games/join', {
+    const response = await publicApi.post('/games/join', {
       name: state.userName,
       slug: state.gameId
     })
@@ -24,8 +24,8 @@ export const JoinGame = ({ setUUID }) => {
           <input
             id='userName'
             type='text'
-            value={state.username}
-            onChange={v => setState({ ...state, username: v })}
+            value={state.userName}
+            onChange={e => setState({ ...state, userName: e.target.value })}
           />
         </fieldset>
         <fieldset>
@@ -34,9 +34,10 @@ export const JoinGame = ({ setUUID }) => {
             id='gameId'
             type='text'
             value={state.gameId}
-            onChange={v => setState({ ...state, gameId: v })}
+            onChange={e => setState({ ...state, gameId: e.target.value })}
           />
         </fieldset>
+        <input type='Submit' value='Submit' />
       </form>
     </div>
   )
