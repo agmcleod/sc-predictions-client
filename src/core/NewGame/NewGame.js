@@ -24,8 +24,8 @@ const NewGameComponent = ({ history, setUUID }) => {
 
   useEffect(() => {
     publicApi.get('/questions').then(response => {
-      if (response.data.questions) {
-        setQuestions(response.data.questions)
+      if (response.data) {
+        setQuestions(response.data)
       }
     })
   }, [])
