@@ -5,10 +5,13 @@ import Typography from '@material-ui/core/Typography'
 
 import { publicApi } from '@common/api'
 import { Button } from '@common/components/Button'
+import { getErrorsFromResponse } from '@common/getErrorsFromResponse'
 import { TextField } from '@common/components/TextField'
+import { FormError } from '@common/components/FormError'
 
 export const JoinGame = ({ setUUID }) => {
   const [state, setState] = useState({ userName: '', gameId: '' })
+  const [error, setError] = useState('')
 
   const onSubmit = async e => {
     e.preventDefault()
@@ -20,7 +23,8 @@ export const JoinGame = ({ setUUID }) => {
 
       setUUID(response.data.session_id)
     } catch (err) {
-      console.log(err)
+      setError(getErrorsFromResponse(err).join(', '))
+      console.log(err.response)
     }
   }
 
@@ -43,6 +47,7 @@ export const JoinGame = ({ setUUID }) => {
             value={state.gameId}
           />
         </Box>
+        <FormError errorMsg={error} />
         <Button type='Submit' variant='contained'>
           Submit
         </Button>
