@@ -1,23 +1,28 @@
 import { combineReducers } from 'redux'
-import { configureStore } from 'redux-starter-kit'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import thunk from 'redux-thunk'
 
 import { currentUser } from './currentUser'
+import { tokenMiddleware } from './tokenMiddleware'
 
 const rootReducer = combineReducers({
-  currentUser: currentUser.reducer
+  currentUser: currentUser.reducer,
 })
+
+export type State = ReturnType<typeof rootReducer>
 
 const persistConfig = {
   key: 'root',
-  storage
+  storage,
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
-  reducer: persistedReducer
+  reducer: persistedReducer,
+  middleware: [...getDefaultMiddleware<State>(), tokenMiddleware, thunk],
 })
 
 export const persistor = persistStore(store)

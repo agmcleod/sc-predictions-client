@@ -1,9 +1,20 @@
 {
-  "extends": ["prettier", "react-app"],
-  "plugins": ["prettier"],
-  "parser": "babel-eslint",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "react-app",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["prettier", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
   "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "prettier/prettier": "error",
-    "react/prop-types": "error"
+    "@typescript-eslint/camelcase": "warn"
   }
 }

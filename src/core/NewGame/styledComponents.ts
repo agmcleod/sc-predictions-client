@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
-export const StyledFieldset = styled.fieldset`
+interface StyledFieldsetProps {
+  showBottomBorder: boolean
+}
+
+export const StyledFieldset = styled.fieldset<StyledFieldsetProps>`
   border: 0;
   ${({ showBottomBorder, theme }) =>
     showBottomBorder

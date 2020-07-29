@@ -1,54 +1,72 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React, { FC, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { v4 } from 'uuid'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
-import { currentUser } from '@common/currentUser'
-import { publicApi } from '@common/api'
-import { Button } from '@common/components/Button'
-import { FormError } from '@common/components/FormError'
+import { publicApi } from 'common/api'
+import { Button } from 'common/components/Button'
+import { FormError } from 'common/components/FormError'
 
 import { QuestionsSelect } from './QuestionsSelect'
 import { StyledFieldset } from './styledComponents'
 
-function selectQuestion(gameQuestions, setGameQuestions, idx) {
-  return event => {
+interface GameQuestion {
+  id?: number
+  key: string
+}
+
+function selectQuestion(
+  gameQuestions: GameQuestion[],
+  setGameQuestions: (gameQuestions: GameQuestion[]) => void,
+  idx: number,
+) {
+  return (event: React.ChangeEvent<any>) => {
     const id = event.target.value
     gameQuestions[idx].id = parseInt(id, 10)
     setGameQuestions(gameQuestions)
   }
 }
 
-const NewGameComponent = ({ history, setUUID }) => {
+interface NewGameProps {
+  setUUID: (id: string) => void
+}
+
+interface NewGameErrors {
+  gameQuestions?: string
+}
+
+export const NewGame: FC<NewGameProps> = ({ setUUID }) => {
   const [questions, setQuestions] = useState([])
-  const [gameQuestions, setGameQuestions] = useState([{ key: v4() }])
-  const [errors, setErrors] = useState({})
+  const [gameQuestions, setGameQuestions] = useState<GameQuestion[]>([
+    { key: v4() },
+  ])
+  const [errors, setErrors] = useState<NewGameErrors>({})
+  const history = useHistory()
 
   useEffect(() => {
     publicApi
       .get('/questions')
-      .then(response => {
+      .then((response) => {
         if (response.data) {
           setQuestions(response.data)
         }
       })
-      .catch(err => console.error(err))
+      .catch((err) => console.error(err))
   }, [])
 
-  const onSubmit = async e => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const errors = {}
-    if (gameQuestions.filter(gq => !gq.id).length > 0) {
+    const errors: NewGameErrors = {}
+    if (gameQuestions.filter((gq) => !gq.id).length > 0) {
       errors.gameQuestions = 'Each question entry must have a question selected'
     }
 
     setErrors(errors)
     if (Object.keys(errors).length === 0) {
       const response = await publicApi.post('games', {
-        question_ids: gameQuestions.map(gq => gq.id)
+        question_ids: gameQuestions.map((gq) => gq.id),
       })
 
       setUUID(response.data.creator)
@@ -57,11 +75,9 @@ const NewGameComponent = ({ history, setUUID }) => {
     }
   }
 
-  const deleteFn = index => () => {
+  const deleteFn = (index: number) => () => {
     const gqs = gameQuestions.slice(0)
-    console.log('before', gqs.length, JSON.stringify(gqs), index)
     gqs.splice(index, 1)
-    console.log('after', gqs.length, JSON.stringify(gqs), index)
     setGameQuestions(gqs)
   }
 
@@ -85,7 +101,7 @@ const NewGameComponent = ({ history, setUUID }) => {
                       onChange={selectQuestion(
                         gameQuestions,
                         setGameQuestions,
-                        i
+                        i,
                       )}
                       value={gameQuestion.id}
                     />
@@ -107,7 +123,7 @@ const NewGameComponent = ({ history, setUUID }) => {
           <Grid spacing={2} container>
             <Grid item>
               <Button
-                onClick={e => {
+                onClick={(e) => {
                   e.preventDefault()
                   setGameQuestions(gameQuestions.concat({ key: v4() }))
                 }}
@@ -127,15 +143,3 @@ const NewGameComponent = ({ history, setUUID }) => {
     </div>
   )
 }
-
-NewGameComponent.propTypes = {
-  history: PropTypes.object.isRequired,
-  setUUID: PropTypes.func.isRequired
-}
-
-export const NewGame = connect(
-  null,
-  {
-    setUUID: currentUser.actions.setUUID
-  }
-)(NewGameComponent)
