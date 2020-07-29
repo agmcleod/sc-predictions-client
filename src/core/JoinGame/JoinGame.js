@@ -12,12 +12,16 @@ export const JoinGame = ({ setUUID }) => {
 
   const onSubmit = async e => {
     e.preventDefault()
-    const response = await publicApi.post('/games/join', {
-      name: state.userName,
-      slug: state.gameId
-    })
+    try {
+      const response = await publicApi.post('/games/join', {
+        name: state.userName,
+        slug: state.gameId
+      })
 
-    setUUID(response.data.session_id)
+      setUUID(response.data.session_id)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -34,6 +38,7 @@ export const JoinGame = ({ setUUID }) => {
         <Box mb={2}>
           <TextField
             label='Game ID'
+            inputProps={{ minlength: '6', maxlength: '6' }}
             onChange={e => setState({ ...state, gameId: e.target.value })}
             value={state.gameId}
           />
