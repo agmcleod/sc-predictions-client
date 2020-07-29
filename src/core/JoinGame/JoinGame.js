@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import Box from '@material-ui/core/Box'
+import Typography from '@material-ui/core/Typography'
+
 import { publicApi } from '@common/api'
+import { Button } from '@common/components/Button'
+import { TextField } from '@common/components/TextField'
 
 export const JoinGame = ({ setUUID }) => {
   const [state, setState] = useState({ userName: '', gameId: '' })
@@ -17,27 +22,25 @@ export const JoinGame = ({ setUUID }) => {
 
   return (
     <div>
-      <h1>Join Game</h1>
+      <Typography variant='h1'>Join Game</Typography>
       <form onSubmit={onSubmit}>
-        <fieldset>
-          <label htmlFor='userName'>Username</label>
-          <input
-            id='userName'
-            type='text'
-            value={state.userName}
+        <Box mb={2}>
+          <TextField
+            label='Username'
             onChange={e => setState({ ...state, userName: e.target.value })}
+            value={state.userName}
           />
-        </fieldset>
-        <fieldset>
-          <label htmlFor='gameId'>Game ID</label>
-          <input
-            id='gameId'
-            type='text'
-            value={state.gameId}
+        </Box>
+        <Box mb={2}>
+          <TextField
+            label='Game ID'
             onChange={e => setState({ ...state, gameId: e.target.value })}
+            value={state.gameId}
           />
-        </fieldset>
-        <input type='Submit' value='Submit' />
+        </Box>
+        <Button type='Submit' variant='contained'>
+          Submit
+        </Button>
       </form>
     </div>
   )

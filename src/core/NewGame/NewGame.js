@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { v4 } from 'uuid'
+import Box from '@material-ui/core/Box'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 
 import { currentUser } from '@common/currentUser'
 import { publicApi } from '@common/api'
-import { FormLabel } from '@common/styles'
+import { Button } from '@common/components/Button'
 import { FormError } from '@common/components/FormError'
 
 import { QuestionsSelect } from './QuestionsSelect'
+import { StyledFieldset } from './styledComponents'
 
 function selectQuestion(gameQuestions, setGameQuestions, idx) {
   return event => {
@@ -19,15 +24,18 @@ function selectQuestion(gameQuestions, setGameQuestions, idx) {
 
 const NewGameComponent = ({ history, setUUID }) => {
   const [questions, setQuestions] = useState([])
-  const [gameQuestions, setGameQuestions] = useState([{}])
+  const [gameQuestions, setGameQuestions] = useState([{ key: v4() }])
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
-    publicApi.get('/questions').then(response => {
-      if (response.data) {
-        setQuestions(response.data)
-      }
-    })
+    publicApi
+      .get('/questions')
+      .then(response => {
+        if (response.data) {
+          setQuestions(response.data)
+        }
+      })
+      .catch(err => console.error(err))
   }, [])
 
   const onSubmit = async e => {
@@ -49,36 +57,72 @@ const NewGameComponent = ({ history, setUUID }) => {
     }
   }
 
+  const deleteFn = index => () => {
+    const gqs = gameQuestions.slice(0)
+    console.log('before', gqs.length, JSON.stringify(gqs), index)
+    gqs.splice(index, 1)
+    console.log('after', gqs.length, JSON.stringify(gqs), index)
+    setGameQuestions(gqs)
+  }
+
   return (
     <div>
-      <h1>New Game</h1>
+      <Typography variant='h1'>New Game</Typography>
       <form onSubmit={onSubmit}>
         {gameQuestions.map((gameQuestion, i) => {
-          const id = `question_${i}`
           return (
-            <fieldset key={id}>
-              <FormLabel htmlFor={id} error={Boolean(errors.gameQuestions)}>
-                Question {i + 1}
-              </FormLabel>
-              <QuestionsSelect
-                id={id}
-                questions={questions}
-                onChange={selectQuestion(gameQuestions, setGameQuestions, i)}
-                value={gameQuestion.id}
-              />
-            </fieldset>
+            <StyledFieldset
+              key={gameQuestion.key}
+              showBottomBorder={i + 1 < gameQuestions.length}
+            >
+              <Box paddingY={2}>
+                <Grid container justify='space-between'>
+                  <Grid item>
+                    <QuestionsSelect
+                      id={gameQuestion.key}
+                      label={`Question ${i + 1}`}
+                      questions={questions}
+                      onChange={selectQuestion(
+                        gameQuestions,
+                        setGameQuestions,
+                        i
+                      )}
+                      value={gameQuestion.id}
+                    />
+                  </Grid>
+                  <Grid item>
+                    {i > 0 ? (
+                      <Button color='secondary' onClick={deleteFn(i)}>
+                        Delete
+                      </Button>
+                    ) : null}
+                  </Grid>
+                </Grid>
+              </Box>
+            </StyledFieldset>
           )
         })}
         <FormError errorMsg={errors.gameQuestions} />
-        <button
-          onClick={e => {
-            e.preventDefault()
-            setGameQuestions(gameQuestions.concat({}))
-          }}
-        >
-          Add Question
-        </button>
-        <input type='submit' value='Create' />
+        <Box marginY={2}>
+          <Grid spacing={2} container>
+            <Grid item>
+              <Button
+                onClick={e => {
+                  e.preventDefault()
+                  setGameQuestions(gameQuestions.concat({ key: v4() }))
+                }}
+                variant='contained'
+              >
+                Add Question
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button type='submit' variant='contained'>
+                Create
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
       </form>
     </div>
   )
