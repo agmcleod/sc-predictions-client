@@ -30,14 +30,14 @@ function selectQuestion(
 }
 
 interface NewGameProps {
-  setUUID: (id: string) => void
+  setAccessToken: (id: string) => void
 }
 
 interface NewGameErrors {
   gameQuestions?: string
 }
 
-export const NewGame: FC<NewGameProps> = ({ setUUID }) => {
+export const NewGame: FC<NewGameProps> = ({ setAccessToken }) => {
   const [questions, setQuestions] = useState([])
   const [gameQuestions, setGameQuestions] = useState<GameQuestion[]>([
     { key: v4() },
@@ -69,7 +69,7 @@ export const NewGame: FC<NewGameProps> = ({ setUUID }) => {
         question_ids: gameQuestions.map((gq) => gq.id),
       })
 
-      setUUID(response.data.creator)
+      setAccessToken(response.data.creator)
 
       history.push(`/lobby/${response.data.slug}`)
     }

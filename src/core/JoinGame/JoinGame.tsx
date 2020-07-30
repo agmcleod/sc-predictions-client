@@ -9,10 +9,10 @@ import { TextField } from 'common/components/TextField'
 import { FormError } from 'common/components/FormError'
 
 interface JoinGameProps {
-  setUUID: (id: string) => void
+  setAccessToken: (id: string) => void
 }
 
-export const JoinGame: FC<JoinGameProps> = ({ setUUID }) => {
+export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
   const [state, setState] = useState({ userName: '', gameId: '' })
   const [error, setError] = useState('')
 
@@ -24,7 +24,7 @@ export const JoinGame: FC<JoinGameProps> = ({ setUUID }) => {
         slug: state.gameId,
       })
 
-      setUUID(response.data.session_id)
+      setAccessToken(response.data.session_id)
     } catch (err) {
       setError(getErrorsFromResponse(err).join(', '))
       console.log(err.response)

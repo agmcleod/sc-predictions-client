@@ -1,14 +1,13 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { State } from '../index'
+import { logoutAction } from '../actions'
 
 interface CurrentUserState {
-  uuid: string
   accessToken: string
 }
 
 const initialState: CurrentUserState = {
-  uuid: '',
   accessToken: '',
 }
 
@@ -22,8 +21,10 @@ export const currentUser = createSlice({
     ) => {
       state.accessToken = action.payload
     },
-    setUUID: (state: CurrentUserState, action: PayloadAction<string>) => {
-      state.uuid = action.payload
+  },
+  extraReducers: {
+    [logoutAction.toString()]: (state: CurrentUserState) => {
+      state.accessToken = ''
     },
   },
 })
