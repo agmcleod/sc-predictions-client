@@ -21,7 +21,7 @@ export const App: FC = () => {
             <Router>
               <Container>
                 <Route path='/' exact component={NewGame} />
-                <Route path='/lobby/:id' exact component={Lobby} />
+                <Route path='/lobby' exact component={Lobby} />
                 <Route path='/join' exact component={JoinGame} />
               </Container>
             </Router>

@@ -1,7 +1,9 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import decode from 'jwt-decode'
 
 import { State } from '../index'
 import { logoutAction } from '../actions'
+import { TokenData } from '../types/tokenData'
 
 interface CurrentUserState {
   accessToken: string
@@ -34,6 +36,17 @@ const getAccessToken = createSelector(
   (accessToken) => accessToken,
 )
 
+const getTokenData = createSelector(
+  getAccessToken,
+  (accessToken: string): TokenData => decode(accessToken),
+)
+
+const getGameId = createSelector(getTokenData, (data: TokenData) => {
+  return data.id
+})
+
 export const currentUserSelectors = {
   getAccessToken,
+  getTokenData,
+  getGameId,
 }

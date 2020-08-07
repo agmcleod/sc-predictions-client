@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react'
 import Box from '@material-ui/core/Box'
+import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 
 import { publicApi } from 'common/api'
@@ -15,6 +16,7 @@ interface JoinGameProps {
 export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
   const [state, setState] = useState({ userName: '', gameId: '' })
   const [error, setError] = useState('')
+  const history = useHistory()
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -25,6 +27,7 @@ export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
       })
 
       setAccessToken(response.data.session_id)
+      history.push('/lobby')
     } catch (err) {
       setError(getErrorsFromResponse(err).join(', '))
       console.log(err.response)

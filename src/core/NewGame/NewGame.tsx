@@ -71,7 +71,7 @@ export const NewGame: FC<NewGameProps> = ({ setAccessToken }) => {
 
       setAccessToken(response.data.creator)
 
-      history.push(`/lobby/${response.data.slug}`)
+      history.push('/lobby')
     }
   }
 
