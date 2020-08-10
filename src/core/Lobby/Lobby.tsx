@@ -1,4 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
+import Link from '@material-ui/core/Link'
+import Typography from '@material-ui/core/Typography'
 
 import { FormError } from 'common/components/FormError'
 import { Player } from 'common/store/types/player'
@@ -23,11 +25,11 @@ export const Lobby: FC<LobbyProps> = ({ gameId, getPlayers, players }) => {
 
   return (
     <div>
-      <h1>Game ID: {gameId}</h1>
-      <p>
+      <Typography variant='h1'>Game ID: {gameId}</Typography>
+      <Typography>
         Tell your players the Game ID, and to join at:{' '}
-        <a href={JOIN_URL}>{JOIN_URL}</a>
-      </p>
+        <Link href={JOIN_URL}>{JOIN_URL}</Link>
+      </Typography>
       <ul>
         {players.map((player) => (
           <li key={player.id}>{player.user_name}</li>

@@ -38,11 +38,14 @@ const getAccessToken = createSelector(
 
 const getTokenData = createSelector(
   getAccessToken,
-  (accessToken: string): TokenData => decode(accessToken),
+  (accessToken: string): TokenData => {
+    console.log('decoding access token', accessToken)
+    return decode(accessToken)
+  },
 )
 
 const getGameId = createSelector(getTokenData, (data: TokenData) => {
-  return data.id
+  return data.game_id
 })
 
 export const currentUserSelectors = {

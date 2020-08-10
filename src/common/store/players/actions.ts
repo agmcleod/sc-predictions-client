@@ -9,7 +9,7 @@ export const getPlayers = (
   setError: (msg: string) => void,
 ) => async (dispatch: Dispatch) => {
   try {
-    const res = await publicApi.get(`/api/games/${gameId}/players`)
+    const res = await publicApi.get(`/games/${gameId}/players`)
 
     dispatch(players.actions.setPlayers(res.data))
   } catch (err) {
