@@ -10,24 +10,37 @@ const JOIN_URL = `${process.env.REACT_APP_HOST}/join`
 interface LobbyProps {
   gameId: number
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
+  getGameStatus: (gameId: number, setError: (msg: string) => void) => void
+  gameSlug: string
   players: Player[]
 }
 
-export const Lobby: FC<LobbyProps> = ({ gameId, getPlayers, players }) => {
+export const Lobby: FC<LobbyProps> = ({
+  gameId,
+  getPlayers,
+  getGameStatus,
+  gameSlug,
+  players,
+}) => {
   const [error, setError] = useState('')
   useEffect(() => {
+    // get players once
+    getPlayers(gameId, setError)
+    getGameStatus(gameId, setError)
+    // then setup polling
     const interval = setInterval(() => {
       getPlayers(gameId, setError)
+      getGameStatus(gameId, setError)
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [getPlayers, gameId])
+  }, [getPlayers, getGameStatus, gameId])
 
   return (
     <div>
-      <Typography variant='h1'>Game ID: {gameId}</Typography>
+      <Typography variant='h1'>Game code: {gameSlug}</Typography>
       <Typography>
-        Tell your players the Game ID, and to join at:{' '}
+        Tell your players the game code, and to join at:{' '}
         <Link href={JOIN_URL}>{JOIN_URL}</Link>
       </Typography>
       <ul>

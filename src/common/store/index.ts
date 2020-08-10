@@ -5,11 +5,13 @@ import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
 
 import { currentUser } from './currentUser'
+import { game } from './game'
 import { players } from './players'
 import { tokenMiddleware } from './tokenMiddleware'
 
 const rootReducer = combineReducers({
   currentUser: currentUser.reducer,
+  game: game.reducer,
   players: players.reducer,
 })
 

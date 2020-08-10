@@ -2,16 +2,16 @@ import { Dispatch } from 'redux'
 
 import { publicApi } from 'common/api'
 import { getErrorsFromResponse } from 'common/getErrorsFromResponse'
-import { players } from './slice'
+import { game } from './slice'
 
-export const getPlayers = (
+export const getGameStatus = (
   gameId: number,
   setError: (msg: string) => void,
 ) => async (dispatch: Dispatch) => {
   try {
-    const res = await publicApi.get(`/games/${gameId}/players`)
+    const res = await publicApi.get(`/games/${gameId}`)
 
-    dispatch(players.actions.setPlayers(res.data))
+    dispatch(game.actions.setGameStatus(res.data.slug))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }

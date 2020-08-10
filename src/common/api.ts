@@ -25,8 +25,7 @@ publicApi.interceptors.response.use(
     // if we used a token, log the user out
     if (err.response.status === 401 && token) {
       store.dispatch(logoutAction())
-    } else {
-      return Promise.reject(err)
     }
+    return Promise.reject(err)
   },
 )
