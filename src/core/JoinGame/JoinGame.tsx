@@ -30,7 +30,6 @@ export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
       history.push('/lobby')
     } catch (err) {
       setError(getErrorsFromResponse(err).join(', '))
-      console.log(err.response)
     }
   }
 
@@ -47,7 +46,7 @@ export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
         </Box>
         <Box mb={2}>
           <TextField
-            label='Game ID'
+            label='Game Code'
             inputProps={{ minlength: '6', maxlength: '6' }}
             onChange={(e) => setState({ ...state, gameId: e.target.value })}
             value={state.gameId}
