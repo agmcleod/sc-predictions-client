@@ -48,8 +48,13 @@ const getGameId = createSelector(getTokenData, (data: TokenData) => {
   return data.game_id
 })
 
+const getRole = createSelector(getTokenData, (data: TokenData) => {
+  return data.role
+})
+
 export const currentUserSelectors = {
   getAccessToken,
   getTokenData,
   getGameId,
+  getRole,
 }

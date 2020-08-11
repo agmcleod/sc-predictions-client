@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import MuiButton from '@material-ui/core/Button'
 
-export const Button = MuiButton
+export const Button = styled(MuiButton).attrs({ variant: 'contained' })``

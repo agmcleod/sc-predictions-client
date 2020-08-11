@@ -2,8 +2,10 @@ import React, { FC, useEffect, useState } from 'react'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
 
+import { Button } from 'common/components/Button'
 import { FormError } from 'common/components/FormError'
 import { Player } from 'common/store/types/player'
+import { Role } from 'common/store/types/tokenData'
 
 const JOIN_URL = `${process.env.REACT_APP_HOST}/join`
 
@@ -13,6 +15,7 @@ interface LobbyProps {
   getGameStatus: (gameId: number, setError: (msg: string) => void) => void
   gameSlug: string
   players: Player[]
+  role: Role
 }
 
 export const Lobby: FC<LobbyProps> = ({
@@ -21,6 +24,7 @@ export const Lobby: FC<LobbyProps> = ({
   getGameStatus,
   gameSlug,
   players,
+  role,
 }) => {
   const [error, setError] = useState('')
   useEffect(() => {
@@ -38,17 +42,27 @@ export const Lobby: FC<LobbyProps> = ({
 
   return (
     <div>
-      <Typography variant='h1'>Game code: {gameSlug}</Typography>
-      <Typography>
-        Tell your players the game code, and to join at:{' '}
-        <Link href={JOIN_URL}>{JOIN_URL}</Link>
-      </Typography>
+      {role === Role.Owner ? (
+        <>
+          <Typography variant='h1'>Game code: {gameSlug}</Typography>
+          <Typography>
+            Tell your players the game code, and to join at:{' '}
+            <Link href={JOIN_URL}>{JOIN_URL}</Link>
+          </Typography>
+        </>
+      ) : null}
       <ul>
         {players.map((player) => (
           <li key={player.id}>{player.user_name}</li>
         ))}
       </ul>
       <FormError errorMsg={error} />
+      {role === Role.Owner ? (
+        <>
+          <Typography>Press this once all players have joined</Typography>
+          <Button>Lock Game</Button>
+        </>
+      ) : null}
     </div>
   )
 }

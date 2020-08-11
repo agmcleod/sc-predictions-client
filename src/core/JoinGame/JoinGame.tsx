@@ -53,9 +53,7 @@ export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
           />
         </Box>
         <FormError errorMsg={error} />
-        <Button type='submit' variant='contained'>
-          Submit
-        </Button>
+        <Button type='submit'>Submit</Button>
       </form>
     </div>
   )
