@@ -7,12 +7,14 @@ import thunk from 'redux-thunk'
 import { currentUser } from './currentUser'
 import { game } from './game'
 import { players } from './players'
+import { round } from './round'
 import { tokenMiddleware } from './tokenMiddleware'
 
 const rootReducer = combineReducers({
   currentUser: currentUser.reducer,
   game: game.reducer,
   players: players.reducer,
+  round: round.reducer,
 })
 
 export type State = ReturnType<typeof rootReducer>

@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import Link from '@material-ui/core/Link'
 import Typography from '@material-ui/core/Typography'
 
@@ -27,6 +28,7 @@ export const Lobby: FC<LobbyProps> = ({
   role,
 }) => {
   const [error, setError] = useState('')
+  const history = useHistory()
   useEffect(() => {
     // get players once
     getPlayers(gameId, setError)
@@ -59,8 +61,7 @@ export const Lobby: FC<LobbyProps> = ({
       <FormError errorMsg={error} />
       {role === Role.Owner ? (
         <>
-          <Typography>Press this once all players have joined</Typography>
-          <Button>Lock Game</Button>
+          <Button onClick={() => history.push('/round')}>Start a Round</Button>
         </>
       ) : null}
     </div>
