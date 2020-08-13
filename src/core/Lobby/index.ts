@@ -9,6 +9,7 @@ import { Lobby as LobbyComp } from './Lobby'
 const mapStateToProps = (state: State) => ({
   gameId: currentUserSelectors.getGameId(state),
   gameSlug: gameSelectors.getSlug(state),
+  hasOpenRound: gameSelectors.hasOpenRound(state),
   role: currentUserSelectors.getRole(state),
   players: playersSelectors.getPlayers(state),
 })

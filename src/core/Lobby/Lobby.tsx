@@ -15,6 +15,7 @@ interface LobbyProps {
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
   getGameStatus: (gameId: number, setError: (msg: string) => void) => void
   gameSlug: string
+  hasOpenRound: boolean
   players: Player[]
   role: Role
 }
@@ -24,6 +25,7 @@ export const Lobby: FC<LobbyProps> = ({
   getPlayers,
   getGameStatus,
   gameSlug,
+  hasOpenRound,
   players,
   role,
 }) => {
@@ -41,6 +43,12 @@ export const Lobby: FC<LobbyProps> = ({
 
     return () => clearInterval(interval)
   }, [getPlayers, getGameStatus, gameId])
+
+  useEffect(() => {
+    if (hasOpenRound) {
+      history.push('/round')
+    }
+  }, [hasOpenRound, history])
 
   return (
     <div>
