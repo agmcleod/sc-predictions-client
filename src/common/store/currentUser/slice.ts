@@ -36,10 +36,11 @@ const getAccessToken = createSelector(
   (accessToken) => accessToken,
 )
 
+// TODO: handle failed decode calls.
+// Currently sorta handled by routing protecting private screens
 const getTokenData = createSelector(
   getAccessToken,
   (accessToken: string): TokenData => {
-    console.log('decoding access token', accessToken)
     return decode(accessToken)
   },
 )
