@@ -1,53 +1,48 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { State } from '../'
 import { logoutAction } from '../actions'
+import { Question } from '../types/question'
 
 interface RoundState {
-  playerOne: string
-  playerTwo: string
+  playerNames: string[]
+  locked: boolean
+  questions: Question[]
 }
 
 const initialState: RoundState = {
-  playerOne: '',
-  playerTwo: '',
+  playerNames: [],
+  locked: false,
+  questions: [],
 }
 
-interface SetPlayersAction {
-  playerOne: string
-  playerTwo: string
+interface ApiResponse {
+  player_names: string[]
+  questions: Question[]
+  round_id: number
+  locked: boolean
 }
 
 export const round = createSlice({
   name: 'round',
   initialState,
   reducers: {
-    setPlayers: (
-      state: RoundState,
-      action: PayloadAction<SetPlayersAction>,
-    ) => {
-      state.playerOne = action.payload.playerOne
-      state.playerTwo = action.payload.playerTwo
+    setData: (state: RoundState, action: PayloadAction<ApiResponse>) => {
+      const { player_names: playerNames, questions, locked } = action.payload
+      state.playerNames = playerNames
+      state.questions = questions
+      state.locked = locked
     },
   },
   extraReducers: {
     [logoutAction.toString()]: (state: RoundState) => {
-      state.playerOne = ''
-      state.playerTwo = ''
+      state.playerNames = []
     },
   },
 })
 
 const getRound = (state: State) => state.round
 
-const getPlayers = createSelector(getRound, (round: RoundState) => {
-  const { playerOne, playerTwo } = round
-  return {
-    playerOne,
-    playerTwo,
-  }
-})
-
 export const roundSelectors = {
-  getPlayers,
+  getRound,
 }

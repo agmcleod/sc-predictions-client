@@ -1,2 +1,2 @@
 export { round, roundSelectors } from './slice'
-export { createRound } from './actions'
+export { createRound, getRoundStatus } from './actions'

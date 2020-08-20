@@ -14,7 +14,17 @@ export const createRound = (
       player_one: playerOne,
       player_two: playerTwo,
     })
-    dispatch(round.actions.setPlayers({ playerOne, playerTwo }))
+  } catch (err) {
+    setError(getErrorsFromResponse(err).join(', '))
+  }
+}
+
+export const getRoundStatus = (setError: (msg: string) => void) => async (
+  dispatch: Dispatch,
+) => {
+  try {
+    const res = await publicApi.get('/current-round')
+    dispatch(round.actions.setData(res.data))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }
