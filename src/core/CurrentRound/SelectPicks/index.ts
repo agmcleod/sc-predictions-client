@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { State } from 'common/store'
-import { roundSelectors, getRoundStatus } from 'common/store/round'
+import { roundSelectors, getRoundStatus, savePicks } from 'common/store/round'
 import { SelectPicks as SelectPicksComp } from './SelectPicks'
 
 const mapStateToProps = (state: State) => {
@@ -12,6 +12,7 @@ const mapStateToProps = (state: State) => {
   }
 }
 
-export const SelectPicks = connect(mapStateToProps, { getRoundStatus })(
-  SelectPicksComp,
-)
+export const SelectPicks = connect(mapStateToProps, {
+  getRoundStatus,
+  savePicks,
+})(SelectPicksComp)

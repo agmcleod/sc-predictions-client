@@ -7,9 +7,8 @@ import { FormError } from 'common/components/FormError'
 import { Select, ChangeEvent } from 'common/components/Select'
 import { Question } from 'common/store/types/question'
 import { getErrorMessageFromArray } from 'common/utils/getErrorMessageFromArray'
+import { Answers } from 'common/store/types/round'
 import { validationSchema } from './validationSchema'
-
-type Answers = { id: number; value: string }[]
 
 interface SelectPicksProps {
   getRoundStatus: (setError: (msg: string) => void) => void

@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 
 import { Role } from 'common/store/types/tokenData'
 import { CreateNewRound } from './CreateNewRound'
+import { SelectPicks } from './SelectPicks'
 
 interface CurrentRoundProps {
   hasOpenRound: boolean
@@ -9,5 +10,11 @@ interface CurrentRoundProps {
 }
 
 export const CurrentRound: FC<CurrentRoundProps> = ({ role, hasOpenRound }) => {
-  return role === Role.Owner && !hasOpenRound ? <CreateNewRound /> : null
+  if (role === Role.Owner && !hasOpenRound) return <CreateNewRound />
+
+  if (role === Role.Player && hasOpenRound) {
+    return <SelectPicks />
+  }
+
+  return null
 }

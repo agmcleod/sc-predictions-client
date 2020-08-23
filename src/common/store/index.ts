@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux'
+import { combineReducers, Action } from 'redux'
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import thunk from 'redux-thunk'
+import thunk, { ThunkDispatch as RTDispatch } from 'redux-thunk'
 
 import { currentUser } from './currentUser'
 import { game } from './game'
@@ -18,6 +18,8 @@ const rootReducer = combineReducers({
 })
 
 export type State = ReturnType<typeof rootReducer>
+
+export type ThunkDispatch = RTDispatch<State, any, Action>
 
 const persistConfig = {
   key: 'root',
