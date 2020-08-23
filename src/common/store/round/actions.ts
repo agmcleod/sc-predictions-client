@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux'
 
 import { publicApi } from 'common/api'
-import { ThunkDispatch } from 'common/store'
+import { ThunkDispatch, State } from 'common/store'
 import { round } from 'common/store/round'
+import { getGameStatus } from 'common/store/game'
 import { Answers } from 'common/store/types/round'
 import { getErrorsFromResponse } from 'common/getErrorsFromResponse'
 
@@ -10,14 +11,14 @@ export const createRound = (
   playerOne: string,
   playerTwo: string,
   setError: (msg: string) => void,
-) => async (dispatch: ThunkDispatch) => {
+) => async (dispatch: ThunkDispatch, getState: () => State) => {
   try {
     await publicApi.post('/rounds', {
       player_one: playerOne,
       player_two: playerTwo,
     })
     // fetch the data, so the owner's screen updates
-    dispatch(getRoundStatus(setError))
+    dispatch(getGameStatus(setError))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }

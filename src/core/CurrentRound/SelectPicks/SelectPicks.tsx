@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
-import { Formik, FieldArray, Form, ArrayHelpers, FormikErrors } from 'formik'
+import { Formik, FieldArray, Form, ArrayHelpers } from 'formik'
 import Box from '@material-ui/core/Box'
+import Typography from '@material-ui/core/Typography'
 
 import { Button } from 'common/components/Button'
 import { FormError } from 'common/components/FormError'
@@ -14,7 +15,7 @@ interface SelectPicksProps {
   getRoundStatus: (setError: (msg: string) => void) => void
   playerNames: string[]
   questions: Question[]
-  savePicks: (answers: Answers) => void
+  savePicks: (answers: Answers, setError: (msg: string) => void) => void
 }
 
 const onChangeAnswer = (
@@ -43,24 +44,25 @@ export const SelectPicks: FC<SelectPicksProps> = ({
       initialValues={{
         answers: questions.map((q) => ({ id: q.id, value: '' })),
       }}
-      onSubmit={(values) => savePicks(values.answers)}
+      onSubmit={(values) => savePicks(values.answers, setError)}
       validationSchema={validationSchema}
     >
       {({ values, errors }) => (
         <Form>
+          <Typography variant='h1'>Select your picks</Typography>
           <FieldArray name='answers'>
             {(arrayHelpers) =>
               values.answers.map((answer, i) => (
                 <Box key={answer.id} mb={2}>
                   <Select
                     id={`question_${answer.id}`}
-                    label='Select answer'
+                    label={questions[i].body}
                     options={playerNames.map((pn) => ({
                       value: pn,
                       label: pn,
                     }))}
                     onChange={onChangeAnswer(arrayHelpers, answer.id, i)}
-                    value={answer}
+                    value={answer.value}
                   />
                   <FormError
                     errorMsg={getErrorMessageFromArray(errors.answers, i)}
@@ -70,9 +72,9 @@ export const SelectPicks: FC<SelectPicksProps> = ({
             }
           </FieldArray>
           <Button type='submit'>Save picks</Button>
+          <FormError errorMsg={error} />
         </Form>
       )}
-      <FormError errorMsg={error} />
     </Formik>
   )
 }

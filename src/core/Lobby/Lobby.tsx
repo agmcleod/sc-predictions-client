@@ -13,7 +13,7 @@ const JOIN_URL = `${process.env.REACT_APP_HOST}/join`
 interface LobbyProps {
   gameId: number
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
-  getGameStatus: (gameId: number, setError: (msg: string) => void) => void
+  getGameStatus: (setError: (msg: string) => void) => void
   gameSlug: string
   hasOpenRound: boolean
   players: Player[]
@@ -34,11 +34,11 @@ export const Lobby: FC<LobbyProps> = ({
   useEffect(() => {
     // get players once
     getPlayers(gameId, setError)
-    getGameStatus(gameId, setError)
+    getGameStatus(setError)
     // then setup polling
     const interval = setInterval(() => {
       getPlayers(gameId, setError)
-      getGameStatus(gameId, setError)
+      getGameStatus(setError)
     }, 5000)
 
     return () => clearInterval(interval)
