@@ -18,7 +18,9 @@ export const CurrentRound: FC<CurrentRoundProps> = ({
 }) => {
   const [error, setError] = useState('')
 
-  useEffect(() => getGameStatus(setError), [getGameStatus])
+  useEffect(() => {
+    getGameStatus(setError)
+  }, [getGameStatus])
 
   if (error) {
     return <FormError errorMsg={error} />

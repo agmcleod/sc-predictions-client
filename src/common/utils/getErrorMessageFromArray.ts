@@ -10,6 +10,8 @@ export const getErrorMessageFromArray = <T = any>(
     const errorForIndex = error[index]
     if (typeof errorForIndex === 'string') {
       return errorForIndex
+    } else {
+      return Object.values(errorForIndex).join(', ')
     }
   }
 }
