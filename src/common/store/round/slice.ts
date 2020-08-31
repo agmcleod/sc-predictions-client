@@ -8,12 +8,14 @@ interface RoundState {
   playerNames: string[]
   locked: boolean
   questions: Question[]
+  picksChosen: boolean
 }
 
 const initialState: RoundState = {
   playerNames: [],
   locked: false,
   questions: [],
+  picksChosen: false,
 }
 
 interface ApiResponse {
@@ -33,6 +35,9 @@ export const round = createSlice({
       state.questions = questions
       state.locked = locked
     },
+    setPicksChosen: (state: RoundState, action: PayloadAction<boolean>) => {
+      state.picksChosen = action.payload
+    },
   },
   extraReducers: {
     [logoutAction.toString()]: (state: RoundState) => {
@@ -45,4 +50,5 @@ const getRound = (state: State) => state.round
 
 export const roundSelectors = {
   getRound,
+  arePicksChosen: (state: State) => state.round.picksChosen,
 }

@@ -41,6 +41,7 @@ export const savePicks = (
 ) => async (dispatch: Dispatch) => {
   try {
     await publicApi.post('/rounds/set-picks', { answers })
+    dispatch(round.actions.setPicksChosen(true))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }

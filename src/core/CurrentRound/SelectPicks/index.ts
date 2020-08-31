@@ -9,6 +9,7 @@ const mapStateToProps = (state: State) => {
   return {
     playerNames: round.playerNames,
     questions: round.questions,
+    arePicksChosen: roundSelectors.arePicksChosen(state),
   }
 }
 

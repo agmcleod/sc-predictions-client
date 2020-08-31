@@ -12,6 +12,7 @@ import { Answers } from 'common/store/types/round'
 import { validationSchema } from './validationSchema'
 
 interface SelectPicksProps {
+  arePicksChosen: boolean
   getRoundStatus: (setError: (msg: string) => void) => void
   playerNames: string[]
   questions: Question[]
@@ -28,6 +29,7 @@ const onChangeAnswer = (
 }
 
 export const SelectPicks: FC<SelectPicksProps> = ({
+  arePicksChosen,
   getRoundStatus,
   playerNames,
   questions,
@@ -42,6 +44,15 @@ export const SelectPicks: FC<SelectPicksProps> = ({
   // assume that it's not ready yet
   if (questions.length === 0 || playerNames.length === 0) {
     return null
+  }
+
+  if (arePicksChosen) {
+    return (
+      <>
+        <Typography variant='h1'>Picks selected</Typography>
+        <Typography>Waiting for round to be locked.</Typography>
+      </>
+    )
   }
 
   return (
