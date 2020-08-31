@@ -39,6 +39,11 @@ export const SelectPicks: FC<SelectPicksProps> = ({
     getRoundStatus(setError)
   }, [getRoundStatus])
 
+  // assume that it's not ready yet
+  if (questions.length === 0 || playerNames.length === 0) {
+    return null
+  }
+
   return (
     <Formik
       initialValues={{
@@ -47,7 +52,7 @@ export const SelectPicks: FC<SelectPicksProps> = ({
       onSubmit={(values) => savePicks(values.answers, setError)}
       validationSchema={validationSchema}
     >
-      {({ values, errors }) => (
+      {({ values, submitCount, errors }) => (
         <Form>
           <Typography variant='h1'>Select your picks</Typography>
           <FieldArray name='answers'>
@@ -65,7 +70,11 @@ export const SelectPicks: FC<SelectPicksProps> = ({
                     value={answer.value}
                   />
                   <FormError
-                    errorMsg={getErrorMessageFromArray(errors.answers, i)}
+                    errorMsg={
+                      submitCount > 0
+                        ? getErrorMessageFromArray(errors.answers, i)
+                        : undefined
+                    }
                   />
                 </Box>
               ))

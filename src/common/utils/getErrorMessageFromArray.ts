@@ -10,7 +10,7 @@ export const getErrorMessageFromArray = <T = any>(
     const errorForIndex = error[index]
     if (typeof errorForIndex === 'string') {
       return errorForIndex
-    } else {
+    } else if (typeof errorForIndex === 'object') {
       return Object.values(errorForIndex).join(', ')
     }
   }
