@@ -4,6 +4,7 @@ import { FormError } from 'common/components/FormError'
 import { Role } from 'common/store/types/tokenData'
 import { CreateNewRound } from './CreateNewRound'
 import { SelectPicks } from './SelectPicks'
+import { ViewCurrentPicks } from './ViewCurrentPicks'
 
 interface CurrentRoundProps {
   getGameStatus: (setError: (msg: string) => void) => void
@@ -26,7 +27,13 @@ export const CurrentRound: FC<CurrentRoundProps> = ({
     return <FormError errorMsg={error} />
   }
 
-  if (role === Role.Owner && !hasOpenRound) return <CreateNewRound />
+  if (role === Role.Owner) {
+    if (hasOpenRound) {
+      return <ViewCurrentPicks />
+    } else {
+      return <CreateNewRound />
+    }
+  }
 
   if (role === Role.Player && hasOpenRound) {
     return <SelectPicks />

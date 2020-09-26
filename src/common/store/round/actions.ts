@@ -46,3 +46,14 @@ export const savePicks = (
     setError(getErrorsFromResponse(err).join(', '))
   }
 }
+
+export const getRoundPicks = (setError: (msg: string) => void) => async (
+  dispatch: Dispatch,
+) => {
+  try {
+    const res = await publicApi.get('/rounds/picks')
+    dispatch(round.actions.setRoundPicks(res.data.data))
+  } catch (err) {
+    setError(getErrorsFromResponse(err).join(', '))
+  }
+}
