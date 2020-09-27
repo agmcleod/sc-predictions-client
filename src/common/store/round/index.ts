@@ -4,4 +4,5 @@ export {
   getRoundStatus,
   getRoundPicks,
   savePicks,
+  lockRound,
 } from './actions'

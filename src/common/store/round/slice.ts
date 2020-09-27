@@ -45,6 +45,9 @@ export const round = createSlice({
     setRoundPicks: (state: RoundState, action: PayloadAction<UserAnswer[]>) => {
       state.roundPicks = action.payload
     },
+    setLocked: (state: RoundState, action: PayloadAction<boolean>) => {
+      state.locked = action.payload
+    },
   },
   extraReducers: {
     [logoutAction.toString()]: (state: RoundState) => {
@@ -59,4 +62,5 @@ export const roundSelectors = {
   getRound,
   arePicksChosen: (state: State) => state.round.picksChosen,
   getRoundPicks: (state: State) => state.round.roundPicks,
+  isLocked: (state: State) => state.round.locked,
 }

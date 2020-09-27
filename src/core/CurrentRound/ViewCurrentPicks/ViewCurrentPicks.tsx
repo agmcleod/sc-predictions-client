@@ -3,6 +3,7 @@ import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import DoneIcon from '@material-ui/icons/Done'
 
+import { Button } from 'common/components/Button'
 import { FormError } from 'common/components/FormError'
 import { Player } from 'common/store/types/player'
 import { UserAnswer } from 'common/store/types/userAnswer'
@@ -12,6 +13,8 @@ interface ViewCurrentPicksProps {
   gameId: number
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
   getRoundPicks: (setError: (msg: string) => void) => void
+  isLocked: boolean
+  lockRound: (setError: (msg: string) => void) => void
   players: Player[]
   roundPicks: UserAnswer[]
 }
@@ -20,6 +23,8 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
   gameId,
   getPlayers,
   getRoundPicks,
+  isLocked,
+  lockRound,
   players,
   roundPicks,
 }) => {
@@ -30,13 +35,17 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
   }, [gameId, getPlayers])
 
   useEffect(() => {
+    if (isLocked) {
+      return
+    }
+
     getRoundPicks(setError)
     const interval = setInterval(() => {
       getRoundPicks(setError)
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [getRoundPicks])
+  }, [getRoundPicks, isLocked])
 
   return (
     <>
@@ -56,6 +65,14 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
         </ul>
 
         <FormError errorMsg={error} />
+
+        <Button
+          disabled={isLocked}
+          onClick={() => lockRound(setError)}
+          type='button'
+        >
+          Lock Round
+        </Button>
       </Box>
     </>
   )

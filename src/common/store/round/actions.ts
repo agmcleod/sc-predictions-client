@@ -57,3 +57,14 @@ export const getRoundPicks = (setError: (msg: string) => void) => async (
     setError(getErrorsFromResponse(err).join(', '))
   }
 }
+
+export const lockRound = (setError: (msg: string) => void) => async (
+  dispatch: Dispatch,
+) => {
+  try {
+    await publicApi.post('/rounds/lock')
+    dispatch(round.actions.setLocked(true))
+  } catch (err) {
+    setError(getErrorsFromResponse(err).join(', '))
+  }
+}
