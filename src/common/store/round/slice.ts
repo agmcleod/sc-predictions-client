@@ -8,6 +8,7 @@ import { UserAnswer } from '../types/userAnswer'
 interface RoundState {
   playerNames: string[]
   locked: boolean
+  finished: boolean
   questions: Question[]
   // when a player has chosen their picks
   picksChosen: boolean
@@ -17,6 +18,7 @@ interface RoundState {
 const initialState: RoundState = {
   playerNames: [],
   locked: false,
+  finished: false,
   questions: [],
   picksChosen: false,
   roundPicks: [],
@@ -27,6 +29,7 @@ interface ApiResponse {
   questions: Question[]
   round_id: number
   locked: boolean
+  finished: boolean
 }
 
 export const round = createSlice({
@@ -51,7 +54,7 @@ export const round = createSlice({
   },
   extraReducers: {
     [logoutAction.toString()]: (state: RoundState) => {
-      state.playerNames = []
+      return { ...initialState, playerNames: [], questions: [], roundPicks: [] }
     },
   },
 })
@@ -63,4 +66,5 @@ export const roundSelectors = {
   arePicksChosen: (state: State) => state.round.picksChosen,
   getRoundPicks: (state: State) => state.round.roundPicks,
   isLocked: (state: State) => state.round.locked,
+  isFinished: (state: State) => state.round.finished,
 }

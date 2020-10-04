@@ -9,6 +9,7 @@ import { CurrentRound as CurrentRoundComp } from './CurrentRound'
 const mapStateToProps = (state: State) => ({
   hasOpenRound: gameSelectors.hasOpenRound(state),
   isLocked: roundSelectors.isLocked(state),
+  isFinished: roundSelectors.isFinished(state),
   role: currentUserSelectors.getRole(state),
 })
 

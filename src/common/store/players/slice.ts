@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit'
 
 import { State } from '../'
 import { Player } from '../types/player'
@@ -21,6 +21,22 @@ export const players = createSlice({
   },
 })
 
+const getPlayers = (state: State) => state.players.players
+
 export const playersSelectors = {
-  getPlayers: (state: State) => state.players.players,
+  getPlayers,
+  getPlayersSortedByScore: createSelector([getPlayers], (players: Player[]) => {
+    const newArr = players.slice(0)
+    newArr.sort((a, b) => {
+      if (a.score > b.score) {
+        return -1
+      } else if (a.score < b.score) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+
+    return newArr
+  }),
 }

@@ -6,37 +6,27 @@ import { CreateNewRound } from './CreateNewRound'
 import { LockedScreen } from './LockedScreen'
 import { SelectPicks } from './SelectPicks'
 import { ViewCurrentPicks } from './ViewCurrentPicks'
+import { Leaderboard } from './Leaderboard'
 
-interface CurrentRoundProps {
-  getGameStatus: (setError: (msg: string) => void) => void
-  getRoundStatus: (setError: (msg: string) => void) => void
-  hasOpenRound: boolean
+interface CurrentPageProps {
+  isFinished: boolean
   isLocked: boolean
+  hasOpenRound: boolean
   role: Role
 }
 
-export const CurrentRound: FC<CurrentRoundProps> = ({
-  getGameStatus,
-  getRoundStatus,
+const CurrentPage: FC<CurrentPageProps> = ({
+  isFinished,
   isLocked,
-  role,
   hasOpenRound,
+  role,
 }) => {
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    getGameStatus(setError)
-    getRoundStatus(setError)
-  }, [getGameStatus, getRoundStatus])
-
-  if (error) {
-    return <FormError errorMsg={error} />
-  }
-
   if (role === Role.Owner) {
     if (hasOpenRound) {
       return <ViewCurrentPicks />
-    } else {
+    } else if (isLocked && !isFinished) {
+      return <SelectPicks />
+    } else if (!isFinished) {
       return <CreateNewRound />
     }
   }
@@ -49,5 +39,46 @@ export const CurrentRound: FC<CurrentRoundProps> = ({
     }
   }
 
+  if (isFinished) {
+    return <Leaderboard />
+  }
+
   return null
+}
+
+interface CurrentRoundProps {
+  getGameStatus: (setError: (msg: string) => void) => void
+  getRoundStatus: (setError: (msg: string) => void) => void
+  hasOpenRound: boolean
+  isFinished: boolean
+  isLocked: boolean
+  role: Role
+}
+
+export const CurrentRound: FC<CurrentRoundProps> = ({
+  getGameStatus,
+  getRoundStatus,
+  isFinished,
+  isLocked,
+  role,
+  hasOpenRound,
+}) => {
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    getGameStatus(setError)
+    getRoundStatus(setError)
+  }, [getGameStatus, getRoundStatus])
+
+  return (
+    <>
+      <CurrentPage
+        hasOpenRound={hasOpenRound}
+        isFinished={isFinished}
+        isLocked={isLocked}
+        role={role}
+      />
+      <FormError errorMsg={error} />
+    </>
+  )
 }

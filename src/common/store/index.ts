@@ -10,7 +10,7 @@ import { players } from './players'
 import { round } from './round'
 import { tokenMiddleware } from './tokenMiddleware'
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   currentUser: currentUser.reducer,
   game: game.reducer,
   players: players.reducer,
