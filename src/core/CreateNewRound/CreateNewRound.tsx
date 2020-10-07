@@ -1,4 +1,6 @@
 import React, { FC, useState } from 'react'
+import { History } from 'history'
+import { useHistory } from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { Formik, Form } from 'formik'
@@ -11,6 +13,7 @@ import { validationSchema } from './validationSchema'
 
 interface CreateNewRoundProps {
   createRound: (
+    history: History,
     playerOne: string,
     playerTwo: string,
     setError: (msg: string) => void,
@@ -19,6 +22,7 @@ interface CreateNewRoundProps {
 
 export const CreateNewRound: FC<CreateNewRoundProps> = ({ createRound }) => {
   const [error, setError] = useState('')
+  const history = useHistory()
 
   return (
     <Formik
@@ -26,7 +30,7 @@ export const CreateNewRound: FC<CreateNewRoundProps> = ({ createRound }) => {
       validationSchema={validationSchema}
       onSubmit={(values) => {
         setError('')
-        createRound(values.playerOne, values.playerTwo, setError)
+        createRound(history, values.playerOne, values.playerTwo, setError)
       }}
     >
       {({ errors, submitCount, values, setFieldValue }) => (

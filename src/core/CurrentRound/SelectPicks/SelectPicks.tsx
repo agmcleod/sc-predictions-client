@@ -39,6 +39,11 @@ export const SelectPicks: FC<SelectPicksProps> = ({
 
   useEffect(() => {
     getRoundStatus(setError)
+    const interval = setInterval(() => {
+      getRoundStatus(setError)
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [getRoundStatus])
 
   // assume that it's not ready yet

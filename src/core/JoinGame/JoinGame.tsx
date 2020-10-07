@@ -10,10 +10,14 @@ import { TextField } from 'common/components/TextField'
 import { FormError } from 'common/components/FormError'
 
 interface JoinGameProps {
+  logoutAction: () => void
   setAccessToken: (id: string) => void
 }
 
-export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
+export const JoinGame: FC<JoinGameProps> = ({
+  logoutAction,
+  setAccessToken,
+}) => {
   const [state, setState] = useState({ userName: '', gameId: '' })
   const [error, setError] = useState('')
   const history = useHistory()
@@ -26,6 +30,7 @@ export const JoinGame: FC<JoinGameProps> = ({ setAccessToken }) => {
         slug: state.gameId,
       })
 
+      logoutAction()
       setAccessToken(response.data.session_id)
       history.push('/lobby')
     } catch (err) {

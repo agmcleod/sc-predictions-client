@@ -8,4 +8,5 @@ export interface TokenData {
   user_name: string
   game_id: number
   role: Role
+  exp: number
 }

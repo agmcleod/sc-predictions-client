@@ -5,4 +5,5 @@ export {
   getRoundPicks,
   savePicks,
   lockRound,
+  scoreRound,
 } from './actions'

@@ -17,7 +17,7 @@ interface LobbyProps {
   gameSlug: string
   hasOpenRound: boolean
   players: Player[]
-  role: Role
+  role: Role | null
 }
 
 export const Lobby: FC<LobbyProps> = ({
@@ -69,7 +69,9 @@ export const Lobby: FC<LobbyProps> = ({
       <FormError errorMsg={error} />
       {role === Role.Owner ? (
         <>
-          <Button onClick={() => history.push('/round')}>Start a Round</Button>
+          <Button onClick={() => history.push('/create-round')}>
+            Start a Round
+          </Button>
         </>
       ) : null}
     </div>

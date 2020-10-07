@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import { publicApi } from 'common/api'
 import { Button } from 'common/components/Button'
 import { FormError } from 'common/components/FormError'
+import { Link } from 'common/components/Link'
+import { Role } from 'common/store/types/tokenData'
 
 import { QuestionsSelect } from './QuestionsSelect'
 import { StyledFieldset } from './styledComponents'
@@ -30,6 +32,11 @@ function selectQuestion(
 }
 
 interface NewGameProps {
+  accessToken: string
+  getGameStatus: (setError: (msg: string) => void) => void
+  hasUnfinishedRound: boolean
+  logoutAction: () => void
+  role: Role | null
   setAccessToken: (id: string) => void
 }
 
@@ -37,13 +44,27 @@ interface NewGameErrors {
   gameQuestions?: string
 }
 
-export const NewGame: FC<NewGameProps> = ({ setAccessToken }) => {
+export const NewGame: FC<NewGameProps> = ({
+  accessToken,
+  getGameStatus,
+  hasUnfinishedRound,
+  logoutAction,
+  role,
+  setAccessToken,
+}) => {
   const [questions, setQuestions] = useState([])
   const [gameQuestions, setGameQuestions] = useState<GameQuestion[]>([
     { key: v4() },
   ])
+  const [requestError, setRequestError] = useState('')
   const [errors, setErrors] = useState<NewGameErrors>({})
   const history = useHistory()
+
+  useEffect(() => {
+    if (accessToken) {
+      getGameStatus(setRequestError)
+    }
+  }, [accessToken, getGameStatus])
 
   useEffect(() => {
     publicApi
@@ -68,6 +89,8 @@ export const NewGame: FC<NewGameProps> = ({ setAccessToken }) => {
       const response = await publicApi.post('games', {
         question_ids: gameQuestions.map((gq) => gq.id),
       })
+
+      logoutAction()
 
       setAccessToken(response.data.creator)
 
@@ -140,6 +163,21 @@ export const NewGame: FC<NewGameProps> = ({ setAccessToken }) => {
           </Grid>
         </Box>
       </form>
+
+      <FormError errorMsg={requestError} />
+
+      {accessToken ? (
+        <>
+          <Box my={3}>
+            <Typography variant='h3'>OR</Typography>
+          </Box>
+          {!hasUnfinishedRound && role === Role.Owner ? (
+            <Link href='/create-round'>Create new round</Link>
+          ) : (
+            <Link href='/round'>Continue current game</Link>
+          )}
+        </>
+      ) : null}
     </div>
   )
 }

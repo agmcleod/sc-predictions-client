@@ -1,11 +1,16 @@
 export interface ResponseError {
-  response: {
+  response?: {
     data: {
       errors: string[]
     }
   }
+  message: string
 }
 
-export const getErrorsFromResponse = (err: ResponseError) => {
-  return err.response.data.errors
+export const getErrorsFromResponse = (err: ResponseError): string[] => {
+  if (err.response) {
+    return err.response.data.errors
+  }
+
+  return [err.message]
 }

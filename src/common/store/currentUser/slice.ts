@@ -36,21 +36,28 @@ const getAccessToken = createSelector(
   (accessToken) => accessToken,
 )
 
-// TODO: handle failed decode calls.
-// Currently sorta handled by routing protecting private screens
 const getTokenData = createSelector(
   getAccessToken,
-  (accessToken: string): TokenData => {
-    return decode(accessToken)
+  (accessToken: string): TokenData | null => {
+    if (accessToken) {
+      try {
+        return decode(accessToken)
+      } catch (err) {
+        return null
+      }
+    }
+
+    return null
   },
 )
 
-const getGameId = createSelector(getTokenData, (data: TokenData) => {
-  return data.game_id
+// fallback is not a valid ID, but endpoints using it will 401 anyways, due to no token
+const getGameId = createSelector(getTokenData, (data: TokenData | null) => {
+  return data ? data.game_id : 0
 })
 
-const getRole = createSelector(getTokenData, (data: TokenData) => {
-  return data.role
+const getRole = createSelector(getTokenData, (data: TokenData | null) => {
+  return data ? data.role : null
 })
 
 export const currentUserSelectors = {

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit'
 
 import { State } from '../'
 import { Player } from '../types/player'
+import { logoutAction } from '../actions'
 
 interface PlayerState {
   players: Player[]
@@ -17,6 +18,13 @@ export const players = createSlice({
   reducers: {
     setPlayers: (state: PlayerState, action: PayloadAction<Player[]>) => {
       state.players = action.payload
+    },
+  },
+  extraReducers: {
+    [logoutAction.toString()]: (state: PlayerState) => {
+      return {
+        players: [],
+      }
     },
   },
 })

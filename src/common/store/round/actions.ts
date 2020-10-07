@@ -1,13 +1,15 @@
 import { Dispatch } from 'redux'
+import { History } from 'history'
 
 import { publicApi } from 'common/api'
 import { ThunkDispatch, State } from 'common/store'
 import { round } from 'common/store/round'
-import { getGameStatus } from 'common/store/game'
+import { getGameStatus, game } from 'common/store/game'
 import { Answers } from 'common/store/types/round'
 import { getErrorsFromResponse } from 'common/getErrorsFromResponse'
 
 export const createRound = (
+  history: History,
   playerOne: string,
   playerTwo: string,
   setError: (msg: string) => void,
@@ -19,6 +21,7 @@ export const createRound = (
     })
     // fetch the data, so the owner's screen updates
     dispatch(getGameStatus(setError))
+    history.push('/round')
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }
@@ -53,6 +56,7 @@ export const getRoundPicks = (setError: (msg: string) => void) => async (
   try {
     const res = await publicApi.get('/rounds/picks')
     dispatch(round.actions.setRoundPicks(res.data.data))
+    dispatch(round.actions.setLocked(res.data.locked))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }
@@ -64,6 +68,24 @@ export const lockRound = (setError: (msg: string) => void) => async (
   try {
     await publicApi.post('/rounds/lock')
     dispatch(round.actions.setLocked(true))
+    dispatch(game.actions.setOpenRound(false))
+  } catch (err) {
+    setError(getErrorsFromResponse(err).join(', '))
+  }
+}
+
+export const scoreRound = (
+  answers: Answers,
+  setError: (msg: string) => void,
+) => async (dispatch: Dispatch) => {
+  try {
+    await publicApi.post('/rounds/score', {
+      answers: answers.map((a) => ({
+        question_id: a.id,
+        answer: a.value,
+      })),
+    })
+    dispatch(round.actions.setFinished(true))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }

@@ -14,8 +14,7 @@ export const getGameStatus = (setError: (msg: string) => void) => async (
     const gameId = currentUserSelectors.getGameId(getState())
     const res = await publicApi.get(`/games/${gameId}`)
 
-    const { slug, open_round } = res.data
-    dispatch(game.actions.setGameStatus({ slug, openRound: open_round }))
+    dispatch(game.actions.setGameStatus(res.data))
   } catch (err) {
     setError(getErrorsFromResponse(err).join(', '))
   }

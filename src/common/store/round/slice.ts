@@ -37,10 +37,16 @@ export const round = createSlice({
   initialState,
   reducers: {
     setData: (state: RoundState, action: PayloadAction<ApiResponse>) => {
-      const { player_names: playerNames, questions, locked } = action.payload
+      const {
+        player_names: playerNames,
+        questions,
+        locked,
+        finished,
+      } = action.payload
       state.playerNames = playerNames
       state.questions = questions
       state.locked = locked
+      state.finished = finished
     },
     setPicksChosen: (state: RoundState, action: PayloadAction<boolean>) => {
       state.picksChosen = action.payload
@@ -50,6 +56,9 @@ export const round = createSlice({
     },
     setLocked: (state: RoundState, action: PayloadAction<boolean>) => {
       state.locked = action.payload
+    },
+    setFinished: (state: RoundState, action: PayloadAction<boolean>) => {
+      state.finished = action.payload
     },
   },
   extraReducers: {
