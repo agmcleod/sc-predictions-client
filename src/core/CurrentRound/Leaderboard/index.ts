@@ -4,7 +4,7 @@ import { State } from 'common/store'
 import { currentUserSelectors } from 'common/store/currentUser'
 import { playersSelectors, getPlayers } from 'common/store/players'
 import { getGameStatus } from 'common/store/game'
-import { getRoundStatus, round } from 'common/store/round'
+import { getRoundStatus } from 'common/store/round'
 import { Leaderboard as LeaderboardComp } from './Leaderboard'
 
 const mapStateToProps = (state: State) => ({
@@ -17,5 +17,4 @@ export const Leaderboard = connect(mapStateToProps, {
   getGameStatus,
   getRoundStatus,
   getPlayers,
-  setPicksChosen: round.actions.setPicksChosen,
 })(LeaderboardComp)

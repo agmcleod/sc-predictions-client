@@ -30,6 +30,7 @@ interface ApiResponse {
   round_id: number
   locked: boolean
   finished: boolean
+  picks_chosen: boolean
 }
 
 export const round = createSlice({
@@ -42,11 +43,13 @@ export const round = createSlice({
         questions,
         locked,
         finished,
+        picks_chosen,
       } = action.payload
       state.playerNames = playerNames
       state.questions = questions
       state.locked = locked
       state.finished = finished
+      state.picksChosen = picks_chosen
     },
     setPicksChosen: (state: RoundState, action: PayloadAction<boolean>) => {
       state.picksChosen = action.payload

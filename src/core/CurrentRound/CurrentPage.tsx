@@ -29,7 +29,7 @@ export const CurrentPage: FC<CurrentPageProps> = ({
   }
 
   if (role === Role.Player) {
-    if (hasOpenRound) {
+    if (hasOpenRound && !isLocked) {
       return <SelectPicks />
     } else if (isLocked && !isFinished) {
       return <LockedScreen />

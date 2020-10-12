@@ -11,7 +11,6 @@ interface LeaderboardProps {
   getGameStatus: (setError: (msg: string) => void) => void
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
   getRoundStatus: (setError: (msg: string) => void) => void
-  setPicksChosen: (value: boolean) => void
   players: Player[]
   role: Role | null
 }
@@ -23,19 +22,12 @@ export const Leaderboard: FC<LeaderboardProps> = ({
   getRoundStatus,
   players,
   role,
-  setPicksChosen,
 }) => {
   const [error, setError] = useState('')
 
   useEffect(() => {
     getPlayers(gameId, setError)
   }, [gameId, getPlayers])
-
-  // TODO: bit of a unclean solution, clears that the user has chosen their picks
-  // potentially ideal to create an endpoint or add this to round status for current user
-  useEffect(() => {
-    setPicksChosen(false)
-  }, [setPicksChosen])
 
   useEffect(() => {
     getRoundStatus(setError)
