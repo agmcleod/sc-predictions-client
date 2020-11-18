@@ -7,6 +7,17 @@ import { ThemeProvider } from 'styled-components'
 import { muiTheme, theme } from 'common/theme'
 import { store, persistor } from 'common/store'
 import { Routes } from 'core/Routes'
+import { createWSConnection } from 'common/websocket'
+
+const client = createWSConnection()
+
+client.onopen = (ev: Event) => {
+  console.log('connect:', ev)
+}
+
+client.onmessage = function (e) {
+  console.log('Received:', e.data)
+}
 
 export const App: FC = () => {
   return (
