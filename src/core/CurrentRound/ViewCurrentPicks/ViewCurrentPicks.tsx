@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import DoneIcon from '@material-ui/icons/Done'
+import CloseIcon from '@material-ui/icons/Close'
 
 import { Button } from 'common/components/Button'
 import { FormError } from 'common/components/FormError'
@@ -58,8 +59,10 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
               {player.user_name}
               {roundPicks.filter((pick) => pick.user_id === player.id).length >
               0 ? (
-                <DoneIcon color='inherit' />
-              ) : null}
+                <DoneIcon className='picked' />
+              ) : (
+                <CloseIcon className='not-picked' />
+              )}
             </PlayerListItem>
           ))}
         </ul>
