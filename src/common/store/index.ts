@@ -9,12 +9,14 @@ import { game } from './game'
 import { players } from './players'
 import { round } from './round'
 import { tokenMiddleware } from './tokenMiddleware'
+import { websocket } from './websocket'
 
 export const rootReducer = combineReducers({
   currentUser: currentUser.reducer,
   game: game.reducer,
   players: players.reducer,
   round: round.reducer,
+  websocket: websocket.reducer,
 })
 
 export type State = ReturnType<typeof rootReducer>
@@ -24,6 +26,7 @@ export type ThunkDispatch = RTDispatch<State, any, Action>
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['websocket'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
