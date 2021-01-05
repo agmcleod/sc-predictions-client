@@ -21,7 +21,7 @@
     "@types/styled-components": "^5.1.1",
     "@types/uuid": "^8.0.0",
     "@types/yup": "^0.29.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "formik": "^2.1.5",
     "jwt-decode": "^2.2.0",
     "react": "^16.13.1",
