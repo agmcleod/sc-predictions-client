@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 
 import { publicApi } from 'common/api'
+import { client } from 'common/websocket'
 import { Button } from 'common/components/Button'
 import { getErrorsFromResponse } from 'common/getErrorsFromResponse'
 import { TextField } from 'common/components/TextField'
@@ -31,8 +32,12 @@ export const JoinGame: FC<JoinGameProps> = ({
       })
 
       logoutAction()
-      setAccessToken(response.data.session_id)
-      history.push('/lobby')
+      const token = response.data.session_id
+      if (token) {
+        setAccessToken(token)
+        client.send(`/auth ${JSON.stringify({ token })}`)
+        history.push('/lobby')
+      }
     } catch (err) {
       setError(getErrorsFromResponse(err).join(', '))
     }
