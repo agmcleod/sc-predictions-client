@@ -7,15 +7,7 @@ import { ThemeProvider } from 'styled-components'
 import { muiTheme, theme } from 'common/theme'
 import { store, persistor } from 'common/store'
 import { Routes } from 'core/Routes'
-import { client } from 'common/websocket'
-
-client.onopen = (ev: Event) => {
-  console.log('connect:', ev)
-}
-
-client.onmessage = function (e) {
-  console.log('Received:', e.data)
-}
+import { Websocket } from 'core/Websocket'
 
 export const App: FC = () => {
   return (
@@ -24,6 +16,7 @@ export const App: FC = () => {
         <MuiThemeProvider theme={muiTheme}>
           <PersistGate loading={null} persistor={persistor}>
             <Routes />
+            <Websocket />
           </PersistGate>
         </MuiThemeProvider>
       </ThemeProvider>
