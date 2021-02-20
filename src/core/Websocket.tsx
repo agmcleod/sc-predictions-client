@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 import { websocket } from 'common/store/websocket'
@@ -9,25 +9,24 @@ interface WebsocketProps {
 }
 
 const WebsocketComp: FC<WebsocketProps> = ({ setConnected }) => {
-  const [client, setClient] = useState<WebSocket | null>(getClient())
+  useCallback(() => {
+    const client = getClient()
 
-  useEffect(() => {
-    if (client === null) {
-      setClient(getClient())
-    } else {
-      client.onopen = () => {
-        setConnected(true)
-        console.log('connected')
-      }
-
-      client.onerror = (e) => {
-        console.log('errored', e)
-        setConnected(false)
-        closeConnection()
-        setClient(null)
-      }
+    client.onopen = () => {
+      setConnected(true)
+      console.log('connected')
     }
-  }, [client, setConnected])
+
+    client.onmessage = (m) => {
+      console.log(m)
+    }
+
+    client.onerror = (e) => {
+      console.log('errored', e)
+      setConnected(false)
+      closeConnection()
+    }
+  }, [setConnected])
 
   // ensure we close connection when this component unmounts
   useEffect(() => {

@@ -18,6 +18,7 @@ interface LobbyProps {
   hasOpenRound: boolean
   players: Player[]
   role: Role | null
+  isConnected: boolean
 }
 
 export const Lobby: FC<LobbyProps> = ({
@@ -28,6 +29,7 @@ export const Lobby: FC<LobbyProps> = ({
   hasOpenRound,
   players,
   role,
+  isConnected,
 }) => {
   const [error, setError] = useState('')
   const history = useHistory()
@@ -36,13 +38,20 @@ export const Lobby: FC<LobbyProps> = ({
     getPlayers(gameId, setError)
     getGameStatus(setError)
     // then setup polling
-    const interval = setInterval(() => {
-      getPlayers(gameId, setError)
-      getGameStatus(setError)
-    }, 5000)
+    let interval: null | number = null
+    if (!isConnected) {
+      interval = setInterval(() => {
+        getPlayers(gameId, setError)
+        getGameStatus(setError)
+      }, 5000)
+    }
 
-    return () => clearInterval(interval)
-  }, [getPlayers, getGameStatus, gameId])
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [getPlayers, getGameStatus, gameId, isConnected])
 
   useEffect(() => {
     if (hasOpenRound) {

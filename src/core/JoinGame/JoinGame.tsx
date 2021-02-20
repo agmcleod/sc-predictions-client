@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 
 import { publicApi } from 'common/api'
-import { getClient } from 'common/websocket'
+import { sendMsg } from 'common/websocket'
 import { Button } from 'common/components/Button'
 import { getErrorsFromResponse } from 'common/getErrorsFromResponse'
 import { TextField } from 'common/components/TextField'
@@ -31,12 +31,12 @@ export const JoinGame: FC<JoinGameProps> = ({
         slug: state.gameId,
       })
 
+      // clear previous data
       logoutAction()
       const token = response.data.session_id
       if (token) {
         setAccessToken(token)
-        const client = getClient()
-        client.send(`/auth ${JSON.stringify({ token })}`)
+        sendMsg(`/auth ${JSON.stringify({ token })}`)
         history.push('/lobby')
       }
     } catch (err) {

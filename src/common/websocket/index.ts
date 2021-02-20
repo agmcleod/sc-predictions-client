@@ -18,6 +18,20 @@ export const getClient = (): WebSocket => {
   return state.client
 }
 
+export const sendMsg = (data: string) => {
+  const client = getClient()
+  if (client.readyState === WebSocket.CONNECTING) {
+    const int = setInterval(() => {
+      if (client.readyState === WebSocket.OPEN) {
+        clearInterval(int)
+        client.send(data)
+      }
+    }, 50)
+  } else {
+    client.send(data)
+  }
+}
+
 export const closeConnection = () => {
   if (state.client) {
     state.client.close()
