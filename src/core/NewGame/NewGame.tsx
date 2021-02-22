@@ -6,7 +6,6 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 import { publicApi } from 'common/api'
-import { sendMsg } from 'common/websocket'
 import { Button } from 'common/components/Button'
 import { FormError } from 'common/components/FormError'
 import { Link } from 'common/components/Link'
@@ -92,7 +91,6 @@ export const NewGame: FC<NewGameProps> = ({
       })
 
       logoutAction()
-      sendMsg(`/auth ${JSON.stringify({ token: response.data.creator })}`)
       setAccessToken(response.data.creator)
 
       history.push('/lobby')

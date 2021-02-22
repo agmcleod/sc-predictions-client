@@ -1,15 +1,19 @@
-import { FC, useCallback, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { connect } from 'react-redux'
 
-import { websocket } from 'common/store/websocket'
-import { closeConnection, getClient } from 'common/websocket'
+import { State } from 'common/store'
+import { websocket, websocketSelectors } from 'common/store/websocket'
+import { currentUserSelectors } from 'common/store/currentUser'
+import { closeConnection, getClient, sendMsg } from 'common/websocket'
 
 interface WebsocketProps {
+  accessToken: string
+  isConnected: boolean
   setConnected: (value: boolean) => void
 }
 
-const WebsocketComp: FC<WebsocketProps> = ({ setConnected }) => {
-  useCallback(() => {
+const WebsocketComp: FC<WebsocketProps> = ({ accessToken, isConnected, setConnected }) => {
+  useEffect(() => {
     const client = getClient()
 
     client.onopen = () => {
@@ -28,6 +32,12 @@ const WebsocketComp: FC<WebsocketProps> = ({ setConnected }) => {
     }
   }, [setConnected])
 
+  useEffect(() => {
+    if (accessToken && isConnected) {
+      sendMsg(`/auth ${JSON.stringify({ token: accessToken })}`)
+    }
+  }, [accessToken, isConnected])
+
   // ensure we close connection when this component unmounts
   useEffect(() => {
     return () => closeConnection()
@@ -36,6 +46,10 @@ const WebsocketComp: FC<WebsocketProps> = ({ setConnected }) => {
   return null
 }
 
-export const Websocket = connect(null, {
+export const Websocket = connect((state: State) => ({
+  accessToken: currentUserSelectors.getAccessToken(state),
+  isConnected: websocketSelectors.isConnected(state)
+}), {
   setConnected: websocket.actions.setConnected,
+
 })(WebsocketComp)
