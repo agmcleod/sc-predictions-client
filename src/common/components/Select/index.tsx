@@ -31,7 +31,7 @@ export const Select: FC<SelectProps> = ({
   return (
     <>
       <InputLabel id={id}>{label}</InputLabel>
-      <MuiSelect labelId={id} value={value} onChange={onChange}>
+      <MuiSelect labelId={id} value={value || ''} onChange={onChange}>
         {options.map((option, i) => (
           <MenuItem key={`${i}`} value={option.value}>
             {option.label}

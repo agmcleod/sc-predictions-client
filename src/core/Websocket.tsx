@@ -1,18 +1,32 @@
 import { FC, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 
 import { State } from 'common/store'
 import { websocket, websocketSelectors } from 'common/store/websocket'
 import { currentUserSelectors } from 'common/store/currentUser'
+import { players } from 'common/store/players'
 import { closeConnection, getClient, sendMsg } from 'common/websocket'
 
 interface WebsocketProps {
   accessToken: string
+  handleWebsocketData: (data: WebsocketMsg) => void
   isConnected: boolean
   setConnected: (value: boolean) => void
 }
 
-const WebsocketComp: FC<WebsocketProps> = ({ accessToken, isConnected, setConnected }) => {
+interface WebsocketMsg {
+  game_id: number
+  data: any
+  path: string
+}
+
+const WebsocketComp: FC<WebsocketProps> = ({
+  accessToken,
+  handleWebsocketData,
+  isConnected,
+  setConnected,
+}) => {
   useEffect(() => {
     const client = getClient()
 
@@ -21,8 +35,13 @@ const WebsocketComp: FC<WebsocketProps> = ({ accessToken, isConnected, setConnec
       console.log('connected')
     }
 
-    client.onmessage = (m) => {
-      console.log(m)
+    client.onmessage = (message: MessageEvent) => {
+      try {
+        const data = JSON.parse(message.data) as WebsocketMsg
+        handleWebsocketData(data)
+      } catch (err) {
+        console.error(err)
+      }
     }
 
     client.onerror = (e) => {
@@ -30,7 +49,7 @@ const WebsocketComp: FC<WebsocketProps> = ({ accessToken, isConnected, setConnec
       setConnected(false)
       closeConnection()
     }
-  }, [setConnected])
+  }, [setConnected, handleWebsocketData])
 
   useEffect(() => {
     if (accessToken && isConnected) {
@@ -46,10 +65,20 @@ const WebsocketComp: FC<WebsocketProps> = ({ accessToken, isConnected, setConnec
   return null
 }
 
-export const Websocket = connect((state: State) => ({
-  accessToken: currentUserSelectors.getAccessToken(state),
-  isConnected: websocketSelectors.isConnected(state)
-}), {
-  setConnected: websocket.actions.setConnected,
+const handleWebsocketData = (message: WebsocketMsg) => (dispatch: Dispatch) => {
+  switch (message.path) {
+    case '/players':
+      dispatch(players.actions.setPlayers(message.data))
+      break
+  }
+}
 
+const mapStateToProps = (state: State) => ({
+  accessToken: currentUserSelectors.getAccessToken(state),
+  isConnected: websocketSelectors.isConnected(state),
+})
+
+export const Websocket = connect(mapStateToProps, {
+  setConnected: websocket.actions.setConnected,
+  handleWebsocketData,
 })(WebsocketComp)

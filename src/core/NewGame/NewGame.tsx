@@ -26,8 +26,11 @@ function selectQuestion(
 ) {
   return (event: React.ChangeEvent<any>) => {
     const id = event.target.value
-    gameQuestions[idx].id = parseInt(id, 10)
-    setGameQuestions(gameQuestions)
+    gameQuestions[idx] = {
+      ...gameQuestions[idx],
+      id: parseInt(id, 10),
+    }
+    setGameQuestions(gameQuestions.slice(0))
   }
 }
 
