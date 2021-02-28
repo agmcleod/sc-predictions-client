@@ -14,6 +14,7 @@ interface ViewCurrentPicksProps {
   gameId: number
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
   getRoundPicks: (setError: (msg: string) => void) => void
+  isConnected: boolean
   isLocked: boolean
   lockRound: (setError: (msg: string) => void) => void
   players: Player[]
@@ -24,6 +25,7 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
   gameId,
   getPlayers,
   getRoundPicks,
+  isConnected,
   isLocked,
   lockRound,
   players,
@@ -41,12 +43,19 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
     }
 
     getRoundPicks(setError)
-    const interval = setInterval(() => {
-      getRoundPicks(setError)
-    }, 5000)
+    let interval: null | number = null
+    if (!isConnected) {
+      interval = setInterval(() => {
+        getRoundPicks(setError)
+      }, 5000)
+    }
 
-    return () => clearInterval(interval)
-  }, [getRoundPicks, isLocked])
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [getRoundPicks, isLocked, isConnected])
 
   return (
     <>

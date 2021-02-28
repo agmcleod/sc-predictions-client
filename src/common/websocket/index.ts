@@ -6,11 +6,14 @@ const state: WebsocketState = {
   client: null,
 }
 
-export const createWSConnection = (): WebSocket => {
+export const createWSConnection = (): WebSocket | null => {
+  if (!WebSocket) {
+    return null
+  }
   return new WebSocket(process.env.REACT_APP_WS_URL || '')
 }
 
-export const getClient = (): WebSocket => {
+export const getClient = (): WebSocket | null => {
   if (state.client === null) {
     state.client = createWSConnection()
   }
@@ -20,6 +23,9 @@ export const getClient = (): WebSocket => {
 
 export const sendMsg = (data: string) => {
   const client = getClient()
+  if (!client) {
+    return
+  }
   if (client.readyState === WebSocket.CONNECTING) {
     const int = setInterval(() => {
       if (client.readyState === WebSocket.OPEN) {

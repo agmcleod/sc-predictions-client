@@ -5,6 +5,8 @@ import { Dispatch } from 'redux'
 import { State } from 'common/store'
 import { websocket, websocketSelectors } from 'common/store/websocket'
 import { currentUserSelectors } from 'common/store/currentUser'
+import { game } from 'common/store/game'
+import { round } from 'common/store/round'
 import { players } from 'common/store/players'
 import { closeConnection, getClient, sendMsg } from 'common/websocket'
 
@@ -30,24 +32,24 @@ const WebsocketComp: FC<WebsocketProps> = ({
   useEffect(() => {
     const client = getClient()
 
-    client.onopen = () => {
-      setConnected(true)
-      console.log('connected')
-    }
-
-    client.onmessage = (message: MessageEvent) => {
-      try {
-        const data = JSON.parse(message.data) as WebsocketMsg
-        handleWebsocketData(data)
-      } catch (err) {
-        console.error(err)
+    if (client) {
+      client.onopen = () => {
+        setConnected(true)
       }
-    }
 
-    client.onerror = (e) => {
-      console.log('errored', e)
-      setConnected(false)
-      closeConnection()
+      client.onmessage = (message: MessageEvent) => {
+        try {
+          const data = JSON.parse(message.data) as WebsocketMsg
+          handleWebsocketData(data)
+        } catch (err) {
+          console.error(err)
+        }
+      }
+
+      client.onerror = (e) => {
+        setConnected(false)
+        closeConnection()
+      }
     }
   }, [setConnected, handleWebsocketData])
 
@@ -69,6 +71,15 @@ const handleWebsocketData = (message: WebsocketMsg) => (dispatch: Dispatch) => {
   switch (message.path) {
     case '/players':
       dispatch(players.actions.setPlayers(message.data))
+      break
+    case '/game-status':
+      dispatch(game.actions.setGameStatus(message.data))
+      break
+    case '/round-status':
+      dispatch(round.actions.setData(message.data))
+      break
+    case '/picks':
+      dispatch(round.actions.setRoundPicks(message.data))
       break
   }
 }

@@ -5,20 +5,31 @@ import Typography from '@material-ui/core/Typography'
 import { FormError } from 'common/components/FormError'
 
 interface LockedScreenProps {
+  isConnected: boolean
   getRoundStatus: (setError: (msg: string) => void) => void
 }
 
-export const LockedScreen: FC<LockedScreenProps> = ({ getRoundStatus }) => {
+export const LockedScreen: FC<LockedScreenProps> = ({
+  getRoundStatus,
+  isConnected,
+}) => {
   const [error, setError] = useState('')
   useEffect(() => {
     getRoundStatus(setError)
     // then setup polling
-    const interval = setInterval(() => {
-      getRoundStatus(setError)
-    }, 5000)
+    let interval: null | number = null
+    if (!isConnected) {
+      interval = setInterval(() => {
+        getRoundStatus(setError)
+      }, 5000)
+    }
 
-    return () => clearInterval(interval)
-  }, [getRoundStatus])
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [getRoundStatus, isConnected])
 
   return (
     <>

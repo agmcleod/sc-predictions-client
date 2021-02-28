@@ -43,13 +43,13 @@ export const round = createSlice({
         questions,
         locked,
         finished,
-        picks_chosen,
+        picks_chosen: picksChosen,
       } = action.payload
       state.playerNames = playerNames
       state.questions = questions
       state.locked = locked
       state.finished = finished
-      state.picksChosen = picks_chosen
+      state.picksChosen = picksChosen
     },
     setPicksChosen: (state: RoundState, action: PayloadAction<boolean>) => {
       state.picksChosen = action.payload

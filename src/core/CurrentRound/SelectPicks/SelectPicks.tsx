@@ -17,6 +17,7 @@ interface SelectPicksProps {
   playerNames: string[]
   questions: Question[]
   savePicks: (answers: Answers, setError: (msg: string) => void) => void
+  isConnected: boolean
 }
 
 const onChangeAnswer = (
@@ -34,17 +35,25 @@ export const SelectPicks: FC<SelectPicksProps> = ({
   playerNames,
   questions,
   savePicks,
+  isConnected,
 }) => {
   const [error, setError] = useState('')
 
   useEffect(() => {
     getRoundStatus(setError)
-    const interval = setInterval(() => {
-      getRoundStatus(setError)
-    }, 5000)
+    let interval: null | number = null
+    if (!isConnected) {
+      interval = setInterval(() => {
+        getRoundStatus(setError)
+      }, 5000)
+    }
 
-    return () => clearInterval(interval)
-  }, [getRoundStatus])
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [getRoundStatus, isConnected])
 
   // assume that it's not ready yet
   if (questions.length === 0 || playerNames.length === 0) {

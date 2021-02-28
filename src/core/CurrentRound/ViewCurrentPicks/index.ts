@@ -4,6 +4,7 @@ import { State } from 'common/store'
 import { getRoundPicks, roundSelectors, lockRound } from 'common/store/round'
 import { currentUserSelectors } from 'common/store/currentUser'
 import { playersSelectors, getPlayers } from 'common/store/players'
+import { websocketSelectors } from 'common/store/websocket'
 import { ViewCurrentPicks as ViewCurrentPicksComp } from './ViewCurrentPicks'
 
 const mapStateToProps = (state: State) => ({
@@ -11,6 +12,7 @@ const mapStateToProps = (state: State) => ({
   players: playersSelectors.getPlayers(state),
   roundPicks: roundSelectors.getRoundPicks(state),
   isLocked: roundSelectors.isLocked(state),
+  isConnected: websocketSelectors.isConnected(state),
 })
 
 export const ViewCurrentPicks = connect(mapStateToProps, {

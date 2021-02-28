@@ -11,6 +11,7 @@ interface LeaderboardProps {
   getGameStatus: (setError: (msg: string) => void) => void
   getPlayers: (gameId: number, setError: (msg: string) => void) => void
   getRoundStatus: (setError: (msg: string) => void) => void
+  isConnected: boolean
   players: Player[]
   role: Role | null
 }
@@ -20,6 +21,7 @@ export const Leaderboard: FC<LeaderboardProps> = ({
   getGameStatus,
   getPlayers,
   getRoundStatus,
+  isConnected,
   players,
   role,
 }) => {
@@ -32,14 +34,21 @@ export const Leaderboard: FC<LeaderboardProps> = ({
   useEffect(() => {
     getRoundStatus(setError)
     getGameStatus(setError)
-    // then setup polling
-    const interval = setInterval(() => {
-      getRoundStatus(setError)
-      getGameStatus(setError)
-    }, 5000)
 
-    return () => clearInterval(interval)
-  }, [getRoundStatus, getGameStatus])
+    let interval: null | number = null
+    if (!isConnected) {
+      interval = setInterval(() => {
+        getRoundStatus(setError)
+        getGameStatus(setError)
+      }, 5000)
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [getRoundStatus, getGameStatus, isConnected])
 
   return (
     <div>
