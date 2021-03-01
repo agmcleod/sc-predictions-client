@@ -79,7 +79,8 @@ const handleWebsocketData = (message: WebsocketMsg) => (dispatch: Dispatch) => {
       dispatch(round.actions.setData(message.data))
       break
     case '/picks':
-      dispatch(round.actions.setRoundPicks(message.data))
+      dispatch(round.actions.setRoundPicks(message.data.data))
+      dispatch(round.actions.setLocked(message.data.locked))
       break
   }
 }
