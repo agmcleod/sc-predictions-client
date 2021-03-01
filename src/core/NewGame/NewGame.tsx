@@ -168,18 +168,18 @@ export const NewGame: FC<NewGameProps> = ({
 
       <FormError errorMsg={requestError} />
 
+      <Box my={3}>
+        <Typography variant='h3'>OR</Typography>
+      </Box>
       {accessToken ? (
-        <>
-          <Box my={3}>
-            <Typography variant='h3'>OR</Typography>
-          </Box>
-          {!hasUnfinishedRound && role === Role.Owner ? (
-            <Link href='/create-round'>Create new round</Link>
-          ) : (
-            <Link href='/round'>Continue current game</Link>
-          )}
-        </>
-      ) : null}
+        !hasUnfinishedRound && role === Role.Owner ? (
+          <Link href='/create-round'>Create new round</Link>
+        ) : (
+          <Link href='/round'>Continue current game</Link>
+        )
+      ) : (
+        <Link href='/join'>Join game</Link>
+      )}
     </div>
   )
 }
