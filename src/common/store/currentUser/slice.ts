@@ -42,7 +42,7 @@ const getTokenData = createSelector(
     if (accessToken) {
       try {
         return decode(accessToken)
-      } catch (err) {
+      } catch (err: any) {
         return null
       }
     }

@@ -43,7 +43,7 @@ export const ViewCurrentPicks: FC<ViewCurrentPicksProps> = ({
     }
 
     getRoundPicks(setError)
-    let interval: null | number = null
+    let interval: null | NodeJS.Timeout = null
     if (!isConnected) {
       interval = setInterval(() => {
         getRoundPicks(setError)

@@ -35,7 +35,7 @@ export const Leaderboard: FC<LeaderboardProps> = ({
     getRoundStatus(setError)
     getGameStatus(setError)
 
-    let interval: null | number = null
+    let interval: null | NodeJS.Timeout = null
     if (!isConnected) {
       interval = setInterval(() => {
         getRoundStatus(setError)

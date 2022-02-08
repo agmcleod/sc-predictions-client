@@ -38,7 +38,7 @@ export const Lobby: FC<LobbyProps> = ({
     getPlayers(gameId, setError)
     getGameStatus(setError)
     // then setup polling
-    let interval: null | number = null
+    let interval: null | NodeJS.Timeout = null
     if (!isConnected) {
       interval = setInterval(() => {
         getPlayers(gameId, setError)

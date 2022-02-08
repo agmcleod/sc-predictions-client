@@ -41,7 +41,7 @@ const WebsocketComp: FC<WebsocketProps> = ({
         try {
           const data = JSON.parse(message.data) as WebsocketMsg
           handleWebsocketData(data)
-        } catch (err) {
+        } catch (err: any) {
           console.error(err)
         }
       }

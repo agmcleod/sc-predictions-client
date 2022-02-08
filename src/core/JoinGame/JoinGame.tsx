@@ -37,7 +37,7 @@ export const JoinGame: FC<JoinGameProps> = ({
         setAccessToken(token)
         history.push('/lobby')
       }
-    } catch (err) {
+    } catch (err: any) {
       setError(getErrorsFromResponse(err).join(', '))
     }
   }

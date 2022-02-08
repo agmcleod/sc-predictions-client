@@ -17,7 +17,7 @@ export const LockedScreen: FC<LockedScreenProps> = ({
   useEffect(() => {
     getRoundStatus(setError)
     // then setup polling
-    let interval: null | number = null
+    let interval: null | NodeJS.Timeout = null
     if (!isConnected) {
       interval = setInterval(() => {
         getRoundStatus(setError)

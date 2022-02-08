@@ -20,14 +20,12 @@ interface SelectPicksProps {
   isConnected: boolean
 }
 
-const onChangeAnswer = (
-  arrayHelpers: ArrayHelpers,
-  questionId: number,
-  index: number,
-) => (event: ChangeEvent) => {
-  const playerName = event.target.value
-  arrayHelpers.replace(index, { id: questionId, value: playerName })
-}
+const onChangeAnswer =
+  (arrayHelpers: ArrayHelpers, questionId: number, index: number) =>
+  (event: ChangeEvent) => {
+    const playerName = event.target.value
+    arrayHelpers.replace(index, { id: questionId, value: playerName })
+  }
 
 export const SelectPicks: FC<SelectPicksProps> = ({
   arePicksChosen,
@@ -41,7 +39,7 @@ export const SelectPicks: FC<SelectPicksProps> = ({
 
   useEffect(() => {
     getRoundStatus(setError)
-    let interval: null | number = null
+    let interval: null | NodeJS.Timeout = null
     if (!isConnected) {
       interval = setInterval(() => {
         getRoundStatus(setError)
