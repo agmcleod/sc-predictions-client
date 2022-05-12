@@ -17,14 +17,12 @@ interface ChooseAnswersProps {
   scoreRound: (answers: Answers, setError: (msg: string) => void) => void
 }
 
-const onChangeAnswer = (
-  arrayHelpers: ArrayHelpers,
-  questionId: number,
-  index: number,
-) => (event: ChangeEvent) => {
-  const playerName = event.target.value
-  arrayHelpers.replace(index, { id: questionId, value: playerName })
-}
+const onChangeAnswer =
+  (arrayHelpers: ArrayHelpers, questionId: number, index: number) =>
+  (event: ChangeEvent) => {
+    const playerName = event.target.value
+    arrayHelpers.replace(index, { id: questionId, value: playerName })
+  }
 
 export const ChooseAnswers: FC<ChooseAnswersProps> = ({
   playerNames,
